@@ -2,11 +2,14 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import '../styles/forms.css';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const onSubmit = async (data) => {
     try {
@@ -20,8 +23,8 @@ const Login = () => {
 
       const result = await response.json();
 
-      if (response.ok) {
-        localStorage.setItem('token', result.token);
+      if (response.ok && result.success) {
+        login(result.data.token);
         navigate('/dashboard');
       } else {
         setMessage(result.message);
@@ -32,22 +35,24 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>Email</label>
-          <input {...register('email', { required: true })} />
-          {errors.email && <span>This field is required</span>}
-        </div>
-        <div>
-          <label>Password</label>
-          <input type="password" {...register('password', { required: true })} />
-          {errors.password && <span>This field is required</span>}
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      {message && <p>{message}</p>}
+    <div className="form-container">
+      <div className="form-card">
+        <h1>Login</h1>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-group">
+            <label>Email</label>
+            <input type="email" {...register('email', { required: true })} />
+            {errors.email && <span>This field is required</span>}
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input type="password" {...register('password', { required: true })} />
+            {errors.password && <span>This field is required</span>}
+          </div>
+          <button type="submit" className="form-button">Login</button>
+        </form>
+        {message && <p className="message">{message}</p>}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const { successResponse, errorResponse } = require('../utils/responseUtils');
 
 // @desc    Register a new user
 exports.register = async (req, res) => {
@@ -10,7 +11,7 @@ exports.register = async (req, res) => {
     // Check if user already exists
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ message: 'User already exists' });
+      return errorResponse(res, 'User already exists', 400);
     }
 
     // Create a new user
@@ -23,10 +24,10 @@ exports.register = async (req, res) => {
     // Save the user to the database
     await user.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    successResponse(res, 'User registered successfully', null, 201);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Server error');
+    errorResponse(res, 'Server error');
   }
 };
 
@@ -38,13 +39,13 @@ exports.login = async (req, res) => {
     // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return errorResponse(res, 'Invalid credentials', 400);
     }
 
     // Compare passwords
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return errorResponse(res, 'Invalid credentials', 400);
     }
 
     // Create and sign a JWT
@@ -60,11 +61,11 @@ exports.login = async (req, res) => {
       { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        successResponse(res, 'Authentication successful', { token });
       }
     );
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Server error');
+    errorResponse(res, 'Server error');
   }
 };
