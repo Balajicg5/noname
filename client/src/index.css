@@ -1,10 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Dark Theme Colors */
+  --background-color: #1a202c;
+  --text-color: #e2e8f0;
+  --card-bg-color: rgba(255, 255, 255, 0.15);
+  --card-border-color: rgba(255, 255, 255, 0.2);
+  --gradient-color-1: #0f0c29;
+  --gradient-color-2: #302b63;
+  --gradient-color-3: #24243e;
+  --gradient-color-4: #0f0c29;
+  --gradient-color-5: #302b63;
+}
+
+.light {
+  /* Light Theme Colors */
+  --background-color: #f0f2f5;
+  --text-color: #2d3748;
+  --card-bg-color: rgba(255, 255, 255, 0.8);
+  --card-border-color: rgba(0, 0, 0, 0.1);
+  --gradient-color-1: #e0eafc;
+  --gradient-color-2: #cfdef3;
+  --gradient-color-3: #e0eafc;
+  --gradient-color-4: #cfdef3;
+  --gradient-color-5: #e0eafc;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 code {
